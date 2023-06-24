@@ -12,6 +12,7 @@ func TestSet(t *testing.T) {
 	s := New[int]()
 
 	a.True(s.IsEmpty(), "Nil set is empty")
+	a.Equal([]int{}, s.ToList(), "Get back nil list for empty set")
 
 	a.True(NewFromList([]int{1, 2, 3}).Equals(NewFromList([]int{3, 2, 1})), "order doesn't matter")
 
