@@ -1,6 +1,7 @@
 package set
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 )
@@ -111,4 +112,19 @@ func (s Set[T]) ToList() []T {
 		l = append(l, k)
 	}
 	return l
+}
+
+var ErrIsEmpty = errors.New("set is empty")
+
+func (s Set[T]) Take() (T, error) {
+	var t T
+	if s.IsEmpty() {
+		return t, ErrIsEmpty
+	}
+	for k, _ := range s {
+		t = k
+		s.Remove(t)
+		return t, nil
+	}
+	panic("not reached")
 }

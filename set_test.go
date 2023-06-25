@@ -1,6 +1,7 @@
 package set
 
 import (
+	"fmt"
 	"sort"
 	"testing"
 
@@ -46,4 +47,24 @@ func TestSet(t *testing.T) {
 	y := NewFromList(ys)
 	a.Equal(x.Intersect(y), NewFromList([]int{3, 5}), "intersect")
 	a.Equal(x.Union(y), NewFromList([]int{1, 3, 5, 7, 8, -1, 100}), "union")
+}
+
+func TestTake(t *testing.T) {
+	a := assert.New(t)
+	l := []int{1, 2, 3, 4, 5}
+	s := NewFromList(l)
+
+	expectedSize := len(l)
+	for i := 0; i < len(l); i++ {
+		a.False(s.IsEmpty(), "Set is not yet empty")
+		t.Logf("Iteration: %d: S: %s", i, s)
+		_, err := s.Take()
+		expectedSize--
+		a.Nil(err, "No error Taking from non-empty")
+		a.Equal(s.Size(), expectedSize, fmt.Sprintf("Iteration %d - check set size", i))
+	}
+	_, err := s.Take()
+	a.Equal(ErrIsEmpty, err, "Can't take from empty set")
+	a.Equal(s.Size(), 0, fmt.Sprintf("Set is now empty"))
+	a.True(s.IsEmpty(), "Set is now empty")
 }
