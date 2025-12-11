@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"sync"
 )
 
 type Set[T comparable] map[T]struct{}
@@ -19,9 +20,11 @@ func (s Set[T]) ForEach(f func(T)) {
 }
 
 func (s Set[T]) ForEachParallel(f func(T)) {
+	var wg sync.WaitGroup
 	for k, _ := range s {
-		go f(k)
+		wg.Go(func() { f(k) })
 	}
+	wg.Wait()
 }
 
 func (s Set[T]) String() string {
