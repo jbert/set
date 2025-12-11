@@ -18,6 +18,12 @@ func (s Set[T]) ForEach(f func(T)) {
 	}
 }
 
+func (s Set[T]) ForEachParallel(f func(T)) {
+	for k, _ := range s {
+		go f(k)
+	}
+}
+
 func (s Set[T]) String() string {
 	b := &strings.Builder{}
 	first := true
